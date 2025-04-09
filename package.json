@@ -1,0 +1,18 @@
+{
+  "name": "i18n-morph",
+  "version": "1.0.55",
+  "description": "Script to translate automatically i18n files using google translate API.",
+  "license": "ISC",
+  "author": "albert2terre",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "scripts": {
+    "postinstall": "node ./src/utils/postinstall.js"
+  },
+  "bin": {
+    "morph": "./src/index.js"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^1.5.2"
+  }
+}
