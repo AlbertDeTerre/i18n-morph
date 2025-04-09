@@ -125,7 +125,7 @@ module.exports = {
 Clone and run locally:
 
 ```bash
-git clone https://github.com/your-username/i18n-mistral-translator.git
+git clone https://github.com/AlbertDeTerre/i18n-morph.git
 cd i18n-mistral-translator
 npm install
 ```
