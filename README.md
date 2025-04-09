@@ -42,7 +42,7 @@ module.exports = {
 
 ## 📝 How to Force Re-Translation of Keys
 
-By default, the package will **not** re-translate keys that already exist in the target file. However, if you want to **force re-translation** of specific keys (even if they already exist), simply wrap the keys in your source file with `##`.
+By default, the package will **not** re-translate keys that already exist in the target file. However, if you want to **force re-translation** of specific keys (even if they already exist), simply wrap the keys in your target file with `##`.
 
 For example:
 
