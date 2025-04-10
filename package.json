@@ -1,6 +1,6 @@
 {
   "name": "i18n-morph",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "description": "Script to translate automatically i18n files using google translate API.",
   "license": "ISC",
   "author": "albert2terre",
