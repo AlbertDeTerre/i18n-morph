@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-const { getConfig, findAppRoot, validateConfig } = require('./utils/config');
-const Mistral = require("@mistralai/mistralai").Mistral
-const fs = require('fs')
-const path = require('path')
+import { getConfig, findAppRoot, validateConfig } from './utils/config';
+import { Mistral } from '@mistralai/mistralai';
+import fs from 'fs'
+import path from 'path';
 
 // Create Mistral object
 const mistral = new Mistral({
