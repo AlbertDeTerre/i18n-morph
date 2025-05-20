@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-export function getConfig() {
+function getConfig() {
     const appDir = findAppRoot();
     const configPath = path.join(appDir, 'i18n-morph.config.js');
 
@@ -19,7 +19,7 @@ export function getConfig() {
     }
 }
 
-export function findAppRoot() {
+function findAppRoot() {
     let currentDir = process.cwd();
 
     // If current dir is node_modules => go to root
@@ -45,7 +45,7 @@ function getDefaultConfig() {
     return defaultConfig;
 }
 
-export function generateDefaultConfig() {
+function generateDefaultConfig() {
     const destinationPath = `${findAppRoot()}/i18n-morph.config.js`;
     const configContent = fs.readFileSync(`${process.cwd()}/src/utils/i18n-morph-default.config.js`, "utf-8");
 
@@ -53,7 +53,7 @@ export function generateDefaultConfig() {
     if (!fs.existsSync(destinationPath)) fs.writeFileSync(destinationPath, configContent);
 }
 
-export function validateConfig() {
+function validateConfig() {
     if (!getConfig().sourceFile) throw new Error("Property 'sourceFile' is missing in the 'i18n-morph.config.js' file.");
     if (!fs.existsSync(path.join(findAppRoot(), getConfig().sourceFile)))
         throw new Error(`Can't find the source file ${path.join(findAppRoot(), getConfig().sourceFile)} in your project.`);
@@ -68,4 +68,11 @@ export function validateConfig() {
         }
     }
     if (!getConfig().mistralApiKey) throw new Error(`Property 'mistralApiKey' is missing in the 'i18n-morph.config.js' file.`);
+}
+
+module.exports = {
+    validateConfig,
+    findAppRoot,
+    getConfig,
+    generateDefaultConfig
 }
