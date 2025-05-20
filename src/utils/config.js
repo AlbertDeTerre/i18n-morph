@@ -8,7 +8,7 @@ function getConfig() {
     try {
         if (fs.existsSync(configPath)) {
             const userConfig = require(configPath);
-            return userConfig;
+            return userConfig.default;
         } else {
             console.warn(`Can't find any configuration at ${configPath}, will be using the default config.`);
             return getDefaultConfig();
