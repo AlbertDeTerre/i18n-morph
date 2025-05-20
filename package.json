@@ -5,12 +5,12 @@
   "license": "ISC",
   "author": "albert2terre",
   "type": "module",
-  "main": "./src/index.js",
+  "main": "src/index.js",
   "scripts": {
     "postinstall": "node ./src/utils/postinstall.js"
   },
   "bin": {
-    "morph": "./src/index.js"
+    "morph": "src/index.js"
   },
   "dependencies": {
     "@mistralai/mistralai": "^1.5.2"
@@ -19,5 +19,6 @@
     "type": "git",
     "url": "https://github.com/AlbertDeTerre/i18n-morph"
   },
-  "homepage": "https://github.com/AlbertDeTerre/i18n-morph"
+  "homepage": "https://github.com/AlbertDeTerre/i18n-morph",
+  "types": "types/index.d.ts"
 }
