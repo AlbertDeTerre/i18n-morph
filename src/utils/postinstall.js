@@ -1,2 +1,2 @@
-const generateDefaultConfig = require("./config")
+const { generateDefaultConfig } = require("./config")
 generateDefaultConfig();
