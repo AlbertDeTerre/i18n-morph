@@ -3,12 +3,12 @@ const path = require("path")
 
 function getConfig() {
     const appDir = findAppRoot();
-    const configPath = path.join(appDir, 'i18n-morph.config.js');
+    const configPath = path.join(appDir, 'i18n-morph-config.js');
 
     try {
         if (fs.existsSync(configPath)) {
             const userConfig = require(configPath);
-            return userConfig.default;
+            return userConfig;
         } else {
             console.warn(`Can't find any configuration at ${configPath}, will be using the default config.`);
             return getDefaultConfig();

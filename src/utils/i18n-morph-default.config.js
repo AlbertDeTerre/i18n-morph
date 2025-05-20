@@ -1,4 +1,4 @@
-export default {
+module.exports.default = {
     sourceFile: "./path/to/sourcefile.json",                      // File on which the programme bases its translation
     targetFiles: [
         //{ path: "./path/to/file.json", lang: "alien" }
