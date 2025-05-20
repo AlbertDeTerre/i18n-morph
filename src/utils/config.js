@@ -1,6 +1,5 @@
-import fs from "fs"
-import path from 'path';
-import { targetFiles, sourceFile, mistralApiKey } from '../../i18n-morph.config';
+const fs = require("fs")
+const path = require("path")
 
 export function getConfig() {
     const appDir = findAppRoot();

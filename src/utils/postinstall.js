@@ -1,2 +1,2 @@
-import { generateDefaultConfig } from './config';
+const generateDefaultConfig = require("./config")
 generateDefaultConfig();
