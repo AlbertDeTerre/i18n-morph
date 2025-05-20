@@ -33,10 +33,9 @@ function findAppRoot() {
 
 function getDefaultConfig() {
     const defaultConfig = {
-        i18nDir: './src/i18n',
-        sourceFile: "fr.json",
+        sourceFile: "./src/i18n/fr.json",
         targetFiles: [
-            { filename: 'nl.json', language: 'nl' },
+            { filename: './src/i18n/nl.json', language: 'nl' },
             { filename: 'en.json', language: 'en' }
         ],
         mistralApiKey: 'YOUR_API_KEY'
@@ -61,7 +60,7 @@ function validateConfig() {
     if (getConfig().targetFiles.length === 0) throw new Error("You must specify at least one target file in the 'targetFiles' array of the 'i18n-morph.config.js' file.");
     for (const file of getConfig().targetFiles) {
         if (!fs.existsSync(path.join(findAppRoot(), file.path))) {
-            throw new Error(`Can't file the target file ${path.join(findAppRoot(), file.path)} in your project.`);
+            throw new Error(`Can't find the target file ${path.join(findAppRoot(), file.path)} in your project.`);
         }
         if (!file.lang || file.lang === ""){
             throw new Error(`You must specify a value for the 'lang' property of the target file '${file.path}' in the 'i18n-morph.config.js' file.`);
