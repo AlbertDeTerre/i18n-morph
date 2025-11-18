@@ -84,7 +84,7 @@ async function translate(jsonToTranslate, targetLanguage) {
         apiKey: getConfig().mistralApiKey
     });
 
-    return result.choices[0].message.content;
+    return extractJsonFromText(result.choices[0].message.content);
 }
 
 /**
@@ -142,4 +142,100 @@ function mergeMissingKeys(missingKeys, mainObject) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * extractJsonFromText(text)
+ * - Parcourt le texte, repère les '{' ou '[' (via regex),
+ *   puis cherche la fin correspondante en gérant correctement :
+ *   - les chaînes (", ')
+ *   - les échappements \"
+ *   - l'imbrication d'accolades / crochets
+ *
+ * Retour :
+ *   [ { raw: string, value: any, start: number, end: number }, ... ]
+ *
+ * Remarques :
+ *  - Ne corrige pas le JSON non valide (ex: trailing commas). JSON.parse échouera dans ce cas.
+ *  - Utile pour extraire JSON "inline" dans du texte.
+ */
+
+function extractJsonFromText(text) {
+  if (typeof text !== 'string') throw new TypeError('text must be a string');
+
+  const results = [];
+  const openRx = /[\{\[]/g; // regex pour trouver les débuts possibles
+  let match;
+
+  while ((match = openRx.exec(text)) !== null) {
+    const startIndex = match.index;
+    const openChar = match[0];
+    const closeChar = openChar === '{' ? '}' : ']';
+
+    let i = startIndex;
+    let depth = 0;
+    let inString = false;
+    let stringChar = null; // ' or "
+    let escaped = false;
+    let finished = false;
+
+    for (; i < text.length; i++) {
+      const ch = text[i];
+
+      if (inString) {
+        if (escaped) {
+          escaped = false; // le caractère courant était échappé, l'ignorer
+        } else if (ch === '\\') {
+          escaped = true;
+        } else if (ch === stringChar) {
+          inString = false;
+          stringChar = null;
+        }
+        // sinon, on est toujours dans la chaîne
+      } else {
+        if (ch === '"' || ch === "'") {
+          inString = true;
+          stringChar = ch;
+        } else if (ch === openChar) {
+          depth++;
+        } else if (ch === closeChar) {
+          depth--;
+          if (depth === 0) {
+            finished = true;
+            i++; // inclure ce caractère de fermeture
+            break;
+          }
+        } else if (ch === '/' && text[i + 1] === '/') {
+          // Optionnel : ignorer commentaires //... jusqu'à la fin de la ligne (si du pseudo-JS)
+          // On ne considère pas les commentaires dans du JSON strict ; on les ignore ici pour ne pas casser la recherche.
+          const nl = text.indexOf('\n', i + 2);
+          i = nl === -1 ? text.length - 1 : nl;
+        } else if (ch === '/' && text[i + 1] === '*') {
+          // Ignorer commentaire multi-ligne /* ... */
+          const endComment = text.indexOf('*/', i + 2);
+          i = endComment === -1 ? text.length - 1 : endComment + 1;
+        }
+      }
+    } // fin for
+
+    if (!finished) {
+      // pas de bloc clos trouvé, on skip
+      continue;
+    }
+
+    const raw = text.slice(startIndex, i);
+    // Essayer de parser en JSON. Si ça échoue, on ignore.
+    try {
+      const value = JSON.parse(raw);
+      results.push({ raw, value, start: startIndex, end: i });
+      // on avance la position du regex pour éviter chevauchement inutile
+      openRx.lastIndex = i;
+    } catch (e) {
+      // Si JSON.parse échoue, on ignore cette occurrence (ex: trailing commas, JS object literal, ...)
+      // Tu peux essayer d'utiliser un parseur plus permissif si nécessaire.
+      openRx.lastIndex = startIndex + 1; // continue juste après le caractère d'ouverture
+    }
+  }
+
+  return results;
 }
