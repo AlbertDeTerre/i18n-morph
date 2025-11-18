@@ -84,7 +84,7 @@ async function translate(jsonToTranslate, targetLanguage) {
         apiKey: getConfig().mistralApiKey
     });
 
-    return JSON.stringify(extractJsonFromText(result.choices[0].message.content));
+    return JSON.stringify(extractJsonFromText(result.choices[0].message.content)["0"].value);
 }
 
 /**
