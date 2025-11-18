@@ -65,7 +65,7 @@ async function translate(jsonToTranslate, targetLanguage) {
 
     const prompt = `
     Translate the following JSON object from its original language to ${targetLanguage}.\n
-    Answer only with the object. Don't wrap it into markdown.
+    Answer only with the translated JSON. IMPORTANT: Don't wrap it into markdown.
     Keep the keys unchanged and return a valid JSON object:\n\n${JSON.stringify(jsonToTranslate, null, 2)}
     `;
 
